@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
-using OneViewer.Common;
 
 namespace OneViewer.Models
 {
-    public class DriveModel : DirectoryModel
+    internal class DriveModel : DirectoryModel
     {
-        #region Variables
-        #endregion
-
         #region Properties
         public DriveType InfoDriveType { get; private set; }
         public string VolumeLabel { get; private set; }
@@ -19,7 +15,7 @@ namespace OneViewer.Models
         public long TotalSize { get; private set; }
         public long TotalFreeSpace { get; private set; }
         public long AvailableFreeSpace { get; private set; }
-        public DirectoryInfo RootDirectory { get => directoryInfo; }
+        public DirectoryInfo RootDirectory { get; private set; }
         public bool IsReady { get; private set; }
         #endregion
 
@@ -27,32 +23,30 @@ namespace OneViewer.Models
         public DriveModel()
             : base()
         {
-            TypeName = "Local disk";
-            FileSystemType = FileSystemTypes.Drive;
         }
 
         public DriveModel(DriveInfo info)
             : base(info.RootDirectory)
         {
-            switch (info.DriveType)
+            switch(info.DriveType)
             {
                 case DriveType.Removable:
-                    FileSystemType = FileSystemTypes.Drive | FileSystemTypes.USBDrive;
+                    FileSystemType = Common.FileSystemTypes.Drive | Common.FileSystemTypes.USBDrive;
                     break;
                 case DriveType.Fixed:
-                    FileSystemType = FileSystemTypes.Drive | FileSystemTypes.HardDrive;
+                    FileSystemType = Common.FileSystemTypes.Drive | Common.FileSystemTypes.HardDrive;
                     break;
                 case DriveType.Network:
-                    FileSystemType = FileSystemTypes.Drive | FileSystemTypes.NetworkDrive;
+                    FileSystemType = Common.FileSystemTypes.Drive | Common.FileSystemTypes.NetworkDrive;
                     break;
                 case DriveType.CDRom:
-                    FileSystemType = FileSystemTypes.Drive | FileSystemTypes.OpticalDrive;
+                    FileSystemType = Common.FileSystemTypes.Drive | Common.FileSystemTypes.OpticalDrive;
                     break;
                 case DriveType.Ram:
-                    FileSystemType = FileSystemTypes.Drive | FileSystemTypes.SDCard;
+                    FileSystemType = Common.FileSystemTypes.Drive | Common.FileSystemTypes.SDCard;
                     break;
                 default:
-                    FileSystemType = FileSystemTypes.Drive;
+                    FileSystemType = Common.FileSystemTypes.Drive;
                     break;
             }
 
@@ -62,25 +56,28 @@ namespace OneViewer.Models
             TotalSize = info.TotalSize;
             TotalFreeSpace = info.TotalFreeSpace;
             AvailableFreeSpace = info.AvailableFreeSpace;
+            RootDirectory = info.RootDirectory;
             IsReady = info.IsReady;
-
-            var name = info.Name.Replace("\\", "");
-
+            
             if (!string.IsNullOrEmpty(info.VolumeLabel))
-                Name = $"{info.VolumeLabel} ({name})";
+                Name = $"{info.VolumeLabel} ({info.Name})";
             else if (info.DriveType == DriveType.Fixed)
-                Name = $"Local Disk ({name})";
+                Name = $"Local Disk ({info.Name})";
             else
                 Name = info.Name;
-
-            ShortName = name;
-            TypeName = "Local disk";
 
             SetSize(info.TotalSize);
         }
         #endregion
 
         #region Methods
+        public static IEnumerable<DriveModel> LoadDrives()
+        {
+            // Environment.GetLogicalDrives()
+
+            var drives = DriveInfo.GetDrives();
+            return drives.Select(x => new DriveModel(x));
+        }
         #endregion
     }
 }

@@ -1,0 +1,302 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="600"
+        x:Class="OneViewer.MainWindow"
+        Title="One Viewer"
+		MinWidth="1024" MinHeight="600"
+		Width="1024" Height="600">
+	
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Icons.axaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+		
+		<SolidColorBrush x:Key="BorderBrush" Color="{StaticResource CardStrokeColorDefaultSolid}"/>
+		<SolidColorBrush x:Key="PaneBackgroundBrush" Color="#FAFAFA" />
+		
+		<SolidColorBrush x:Key="NavbarTextControlForeground" Color="#242424" />
+		<SolidColorBrush x:Key="NavbarTextControlBackground" Color="#FFFFFF" />
+	</Window.Resources>
+	
+	<Window.Styles>
+		<Style Selector="TextBox.NavSearch">
+			<Setter Property="Foreground" Value="{DynamicResource NavbarTextControlForeground}" />
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="CaretBrush" Value="{DynamicResource NavbarTextControlForeground}" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+			<Setter Property="BorderThickness" Value="0" />
+		</Style>
+
+		<Style Selector="TreeViewItem">
+			<Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=OneWay}" />
+		</Style>
+	</Window.Styles>
+	
+	<DockPanel LastChildFill="True">
+		<Grid DockPanel.Dock="Top" Name="HeadBar" Height="48" Background="{DynamicResource SystemAccentColorBrush}" ColumnDefinitions="*,468,*">
+			<TextBlock Text="One Viewer" Foreground="{DynamicResource NavbarForgroundColorBrush}" FontSize="16" FontWeight="Medium" VerticalAlignment="Center" Margin="12,0"/>
+			<Border Grid.Column="1" Background="{DynamicResource NavbarForgroundColorBrush}" VerticalAlignment="Center" Height="32" CornerRadius="3">
+				<Grid ColumnDefinitions="48,*">
+					<Viewbox Height="16" Margin="8,0">
+						<Path Data="{StaticResource PathIconSearch}" Stretch="Uniform" Fill="{DynamicResource SystemAccentColorBrush}" />
+					</Viewbox>
+					<TextBox Grid.Column="1" x:Name="TextSearch" Classes="NavSearch"/>
+				</Grid>
+			</Border>
+
+			<StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="12,0">
+				<Button x:Name="btnSettings" Classes="NavbarButton" Foreground="{DynamicResource NavbarForgroundColorBrush}">
+					<Viewbox Width="18" VerticalAlignment="Center">
+						<Path Data="{StaticResource PathIconSettings}" Stretch="Uniform" Fill="{Binding $parent[Button].Foreground}" />
+					</Viewbox>
+				</Button>
+			</StackPanel>
+		</Grid>
+
+		<Border Name="SideNav" DockPanel.Dock="Left" BorderThickness="0,0,1,0" BorderBrush="{StaticResource BorderBrush}">
+			<Grid Width="228" RowDefinitions="*,48">
+				<TreeView Margin="0,12" Items="{Binding TreeRoot.Children, Mode=OneWay}" SelectionMode="Single">
+					<TreeView.ItemTemplate>
+						<TreeDataTemplate ItemsSource="{Binding Children}">
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
+								<Viewbox Width="18" IsVisible="{Binding IsHome}">
+									<Path Data="{StaticResource PathIconHome}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsDocuments}">
+									<Path Data="{StaticResource PathIconDocument}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsDownloads}">
+									<Path Data="{StaticResource PathIconDownload}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsMyMusic}">
+									<Path Data="{StaticResource PathIconAudio}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsMyPicture}">
+									<Path Data="{StaticResource PathIconImage}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsMyVideo}">
+									<Path Data="{StaticResource PathIconMedia}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsComputer}">
+									<Path Data="{StaticResource PathIconDesktop}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsHardDrive}">
+									<Path Data="{StaticResource PathIconHardDrive}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsOpticalDrive}">
+									<Path Data="{StaticResource PathIconOpticalDrive}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsUSBDrive}">
+									<Path Data="{StaticResource PathIconUSBDrive}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsSDCard}">
+									<Path Data="{StaticResource PathIconSDCard}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsPhoneDrive}">
+									<Path Data="{StaticResource PathIconPhone}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsNetworkDrive}">
+									<Path Data="{StaticResource PathIconMapDrive}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<Viewbox Width="18" IsVisible="{Binding IsFolder}">
+									<Path Data="{StaticResource PathIconFolder}" Stretch="Uniform" Fill="{Binding $parent[TreeView].Foreground}" />
+								</Viewbox>
+								<TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
+							</StackPanel>
+						</TreeDataTemplate>
+					</TreeView.ItemTemplate>
+				</TreeView>
+				<Button Grid.Row="1" HorizontalAlignment="Stretch" Margin="12,4">
+					<StackPanel Orientation="Horizontal" Height="20" HorizontalAlignment="Center">
+						<Viewbox Width="12" VerticalAlignment="Center">
+							<Path Data="{StaticResource PathIconAdd}" Stretch="Uniform" Fill="{Binding $parent[Button].Foreground}" />
+						</Viewbox>
+						<TextBlock Text="Add folder…" VerticalAlignment="Center" Margin="8,0"/>
+					</StackPanel>
+				</Button>
+			</Grid>
+		</Border>
+
+		<DockPanel Name="CoreContent" LastChildFill="True">
+			<Border DockPanel.Dock="Top" Name="TopBar" BorderThickness="0,0,0,1" BorderBrush="{StaticResource BorderBrush}" Height="48">
+				<Grid ColumnDefinitions="*,*">
+					<Menu>
+						<MenuItem Classes="Dropdown">
+							<MenuItem.Header>
+								<StackPanel Orientation="Horizontal">
+									<Viewbox Width="18" Margin="4,0,8,0">
+										<Path Data="{StaticResource PathIconEdit}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+									<TextBlock Text="Edit" VerticalAlignment="Center"/>
+									<Viewbox Width="10" Margin="12,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Right">
+										<Path Data="{StaticResource PathIconDropArrow}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</StackPanel>
+							</MenuItem.Header>
+							<MenuItem Header="Cut">
+								<MenuItem.Icon>
+									<Viewbox Width="18">
+										<Path Data="{StaticResource PathIconCut}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="Copy">
+								<MenuItem.Icon>
+									<Viewbox Width="18">
+										<Path Data="{StaticResource PathIconCopy}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="Paste">
+								<MenuItem.Icon>
+									<Viewbox Width="18">
+										<Path Data="{StaticResource PathIconPaste}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</MenuItem.Icon>
+							</MenuItem>
+							<Separator />
+							<MenuItem Header="Rename">
+								<MenuItem.Icon>
+									<Viewbox Width="18">
+										<Path Data="{StaticResource PathIconRename}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="Select all">
+								<MenuItem.Icon>
+									<Viewbox Width="18">
+										<Path Data="{StaticResource PathIconSelectAll}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</MenuItem.Icon>
+							</MenuItem>
+						</MenuItem>
+					</Menu>
+					<Menu Grid.Column="1" HorizontalAlignment="Right">
+						<MenuItem Classes="Dropdown">
+							<MenuItem.Header>
+								<StackPanel Orientation="Horizontal">
+									<Viewbox Width="18" Margin="4,0,8,0">
+										<Path Data="{StaticResource PathIconSort}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+									<TextBlock Text="Sort" VerticalAlignment="Center"/>
+									<Viewbox Width="10" Margin="12,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Right">
+										<Path Data="{StaticResource PathIconDropArrow}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</StackPanel>
+							</MenuItem.Header>
+							<MenuItem Header="Name">
+								<MenuItem.Icon>
+									<Viewbox Width="18">
+										<Path Data="{StaticResource PathIconCheckMark}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="Modified"/>
+							<MenuItem Header="Date taken"/>
+							<MenuItem Header="File size"/>
+							<Separator />
+							<MenuItem Header="Ascending">
+								<MenuItem.Icon>
+									<Viewbox Width="18">
+										<Path Data="{StaticResource PathIconCheckMark}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="Descending"/>
+						</MenuItem>
+						<MenuItem Classes="Dropdown">
+							<MenuItem.Header>
+								<StackPanel Orientation="Horizontal">
+									<Viewbox Width="18" Margin="4,0,8,0">
+										<Path Data="{StaticResource PathIconViewTiles}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+									<Viewbox Width="10" Margin="4,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Right">
+										<Path Data="{StaticResource PathIconDropArrow}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</StackPanel>
+							</MenuItem.Header>
+							<MenuItem Header="List">
+								<MenuItem.Icon>
+									<Viewbox Width="18">
+										<Path Data="{StaticResource PathIconViewList}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="Compact List">
+								<MenuItem.Icon>
+									<Viewbox Width="18">
+										<Path Data="{StaticResource PathIconViewList}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="Tiles">
+								<MenuItem.Icon>
+									<Viewbox Width="18">
+										<Path Data="{StaticResource PathIconViewTiles}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+								</MenuItem.Icon>
+							</MenuItem>
+						</MenuItem>
+						<MenuItem Classes="Dropdown">
+							<MenuItem.Header>
+								<StackPanel Orientation="Horizontal">
+									<Viewbox Width="18" Margin="8,0">
+										<Path Data="{StaticResource PathIconInfoPane}" Stretch="Uniform" Fill="{Binding $parent[MenuItem].Foreground}" />
+									</Viewbox>
+									<TextBlock Text="Info" VerticalAlignment="Center" Margin="0,0,8,0"/>
+								</StackPanel>
+							</MenuItem.Header>
+						</MenuItem>
+					</Menu>
+				</Grid>
+			</Border>
+			<Border DockPanel.Dock="Right" Name="DetailsPane" BorderThickness="1,0,0,0" BorderBrush="{StaticResource BorderBrush}" Width="320">
+				<Grid RowDefinitions="48,*">
+					<Border Name="DetailsPaneHeader" BorderThickness="0,0,0,1" BorderBrush="{StaticResource BorderBrush}" Height="48">
+						<Grid ColumnDefinitions="48,*,44">
+							<Image Source="{StaticResource IconYellowFolder}" Width="24" Margin="8" />
+							<TextBlock Grid.Column="1" Text="My Files" FontWeight="Medium" VerticalAlignment="Center" FontSize="14"/>
+							<Button Name="btnInfoClose" Grid.Column="2" Classes="Borderless" HorizontalAlignment="Left" Margin="8,0">
+								<Viewbox Height="12" Width="12" Margin="8">
+									<Path Data="{StaticResource PathIconClose}" Stretch="Uniform" Fill="{Binding $parent[Button].Foreground}" />
+								</Viewbox>
+							</Button>
+						</Grid>
+					</Border>
+					<ScrollViewer Grid.Row="1">
+						<Grid Name="DetailsPaneContent"></Grid>
+					</ScrollViewer>
+				</Grid>
+			</Border>
+			<ScrollViewer>
+				<Grid Name="View" ColumnDefinitions="*,*">
+					<Canvas Width="118" Height="86">
+						<Image Source="{StaticResource IconFolderLargeBG}" Stretch="Uniform" />
+						<Viewbox Margin="-3,0,-2,0">
+							<Image Source="{StaticResource IconFolderLargeFG}" Stretch="Uniform" />
+						</Viewbox>
+						<Viewbox Margin="-3,0,-2,0" IsVisible="False">
+ 							<Image Source="{StaticResource IconFolderLargeFGMedia}" Stretch="Uniform" />
+						</Viewbox>
+						<Viewbox Width="16" Margin="92,60,0,0">
+							<Path Data="{StaticResource PathIconDesktop}" Fill="#BF5712" Stretch="Uniform"/>
+						</Viewbox>
+					</Canvas>
+					<Canvas Grid.Column="1" Width="86" Height="86">
+						<Image Source="{StaticResource IconDriveBlank}" Width="86" Stretch="Uniform" />
+						<Viewbox Width="32" Margin="27,28,0,0">
+							<Path Data="{StaticResource PathIconHardDrive}" Fill="#BF5712" Stretch="Uniform"/>
+						</Viewbox>
+					</Canvas>
+					
+
+				</Grid>
+			</ScrollViewer>
+		</DockPanel>
+	</DockPanel>
+</Window>

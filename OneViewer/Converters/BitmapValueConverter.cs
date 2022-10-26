@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Avalonia;
+using Avalonia.Data.Converters;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using System;
 using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Media;
+
 
 namespace OneViewer.Converters
 {
@@ -14,21 +17,21 @@ namespace OneViewer.Converters
             if (value == null)
                 return null;
 
-            //if (value is string && targetType == typeof(IBitmap))
-            //{
-            //    var uri = new Uri((string)value, UriKind.RelativeOrAbsolute);
-            //    var scheme = uri.IsAbsoluteUri ? uri.Scheme : "file";
+            if (value is string && targetType == typeof(IBitmap))
+            {
+                var uri = new Uri((string)value, UriKind.RelativeOrAbsolute);
+                var scheme = uri.IsAbsoluteUri ? uri.Scheme : "file";
 
-            //    switch (scheme)
-            //    {
-            //        case "file":
-            //            return new Bitmap((string)value);
+                switch (scheme)
+                {
+                    case "file":
+                        return new Bitmap((string)value);
 
-            //        default:
-            //            var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-            //            return new Bitmap(assets.Open(uri));
-            //    }
-            //}
+                    default:
+                        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+                        return new Bitmap(assets.Open(uri));
+                }
+            }
 
             throw new NotSupportedException();
         }

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Avalonia.Controls;
+using Avalonia.Data.Converters;
+using Avalonia.Media.Imaging;
+using System;
 using System.Globalization;
 using System.IO;
-using System.Windows.Data;
 
 namespace OneViewer.Converters
 {
@@ -9,16 +11,15 @@ namespace OneViewer.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            //if (!(value is WindowIcon icon))
-            //    return null;
+            if (!(value is WindowIcon icon))
+                return null;
 
-            //using (var stream = new MemoryStream())
-            //{
-            //    icon.Save(stream);
-            //    stream.Seek(0, SeekOrigin.Begin);
-            //    return new Bitmap(stream);
-            //}
-            throw new NotImplementedException();
+            using (var stream = new MemoryStream())
+            {
+                icon.Save(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+                return new Bitmap(stream);
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

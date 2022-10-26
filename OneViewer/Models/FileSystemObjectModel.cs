@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using OneViewer.Common;
 using OneViewer.Observable;
@@ -10,123 +9,92 @@ namespace OneViewer.Models
     {
         #region Properties
         private FileSystemTypes mFileSystemType = FileSystemTypes.Unknown;
-        public virtual FileSystemTypes FileSystemType 
+        public FileSystemTypes FileSystemType 
         {
             get => mFileSystemType;
             protected set { SetProperty(ref mFileSystemType, value); } 
         }
 
         private string mName = string.Empty;
-        public virtual string Name 
+        public string Name 
         {
             get => mName;
             protected set { SetProperty(ref mName, value); }
         }
 
         private string mExtension = string.Empty;
-        public virtual string Extension 
+        public string Extension 
         {
             get => mExtension;
             protected set { SetProperty(ref mExtension, value); } 
         }
 
         private string mFullName = string.Empty;
-        public virtual string FullName
+        public string FullName
         {
             get => mFullName;
             protected set { SetProperty(ref mFullName, value); }
         }
 
-        private string mShortName = string.Empty;
-        public virtual string ShortName
-        {
-            get => mShortName;
-            protected set { SetProperty(ref mShortName, value); }
-        }
-
         private long mSize = 0L;
-        public virtual long Size
-        {
-            get => mSize;
-        }
-
-        public virtual string SizeString
+        public string SizeString
         {
             get
             {
-                if ((FileSystemType & FileSystemTypes.Folder) == FileSystemTypes.Folder)
+                if ((FileSystemType & FileSystemTypes.Folder) != 0)
                     return string.Empty;
                 return Constants.FormatFileSize(mSize, 2);
             }
         }
 
         private DateTime mCreationTime = DateTime.MinValue;
-        public virtual DateTime CreationTime 
+        public DateTime CreationTime 
         {
             get => mCreationTime;
             protected set { SetProperty(ref mCreationTime, value); } 
         }
 
         private DateTime mLastAccessTime = DateTime.MinValue;
-        public virtual DateTime LastAccessTime 
+        public DateTime LastAccessTime 
         {
             get => mLastAccessTime;
             protected set { SetProperty(ref mLastAccessTime, value); } 
         }
 
         private DateTime mLastWriteTime = DateTime.MinValue;
-        public virtual DateTime LastWriteTime 
+        public DateTime LastWriteTime 
         {
             get => mLastWriteTime;
             protected set { SetProperty(ref mLastWriteTime, value); }
         }
 
-        public virtual string DateModified
-        {
-            get
-            {
-                if (mLastAccessTime == DateTime.MinValue)
-                    return string.Empty;
-                return mLastAccessTime.ToString(CultureInfo.CurrentUICulture);
-            }
-        }
-
         private bool mIsHidden = false;
-        public virtual bool IsHidden
+        public bool IsHidden
         {
             get => mIsHidden;
             protected set { SetProperty(ref mIsHidden, value); }
         }
 
         private bool mIsSystem = false;
-        public virtual bool IsSystem
+        public bool IsSystem
         {
             get => mIsSystem;
             protected set { SetProperty(ref mIsSystem, value); }
         }
 
-        private string mTypeName = string.Empty;
-        public virtual string TypeName
-        {
-            get => mTypeName;
-            protected set { SetProperty(ref mTypeName, value); }
-        }
-
         private bool mExists = false;
-        public virtual bool Exists 
+        public bool Exists 
         {
             get => mExists;
             protected set { SetProperty(ref mExists, value); }
         }
 
         private string mLinkTarget = string.Empty;
-        public virtual string LinkTarget 
+        public string LinkTarget 
         {
             get => mLinkTarget;
             protected set { SetProperty(ref mLinkTarget, value); }
         }
-
-        public abstract DirectoryModel Parent { get; }
         #endregion
 
         #region Constructor
@@ -135,13 +103,13 @@ namespace OneViewer.Models
         #endregion
 
         #region Methods
-        public virtual void SetSize(long size)
+        public void SetSize(long size)
         {
             mSize = size;
             OnPropertyChanged(nameof(SizeString));
         }
 
-        public virtual string GetIconPath()
+        public string GetIconPath()
         {
             return string.Empty;
         }
@@ -151,26 +119,12 @@ namespace OneViewer.Models
             return Name;
         }
 
-        public override int GetHashCode()
-        {
-            return FullName.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is FileSystemObjectModel om)
-            {
-                return om.FullName == this.FullName;
-            }
-            return base.Equals(obj);
-        }
-
-        public virtual object Clone()
+        public object Clone()
         {
             return MemberwiseClone();
         }
 
-        public virtual void CopyTo(object other)
+        public void CopyTo(object other)
         {
             if (other == null) return;
             if (other is FileSystemObjectModel obj)

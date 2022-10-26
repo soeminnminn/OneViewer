@@ -7,34 +7,20 @@ using System.Xml.Linq;
 
 namespace OneViewer.Models
 {
-    public class FileModel : FileSystemObjectModel 
+    internal class FileModel : FileSystemObjectModel 
     {
         #region Properties
         public FileAttributes Attributes { get; protected set; }
         public string DirectoryName { get; protected set; }
         public bool IsReadOnly { get; protected set; }
         public long Length { get; protected set; }
-        public override DirectoryModel Parent
-        {
-            get
-            {
-                var info = new FileInfo(FullName);
-                if (info.Exists && info.Directory != null)
-                    return new DirectoryModel(info.Directory);
-
-                return null;
-            }
-        }
         #endregion
 
         #region Constructor
         public FileModel()
-        {
-            TypeName = "File";
-        }
+        { }
 
         public FileModel(FileInfo info)
-            : this()
         {
             Attributes = info.Attributes;
             CreationTime = info.CreationTime;
@@ -48,8 +34,6 @@ namespace OneViewer.Models
             Length = info.Length;
             LinkTarget = info.LinkTarget;
             Name = info.Name;
-
-            ShortName = Path.GetFileNameWithoutExtension(info.FullName);
 
             SetSize(info.Length);
 

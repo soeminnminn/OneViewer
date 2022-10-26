@@ -40,19 +40,4 @@ namespace OneViewer.Common
         Pictures,
         Videos
     }
-
-    public enum FileViewModes
-    {
-        List,
-        CompactList,
-        Tiles
-    }
-
-    public enum SortModes
-    {
-        Name,
-        Modified,
-        DateTaken,
-        FileSize
-    }
 }

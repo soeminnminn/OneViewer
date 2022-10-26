@@ -1,0 +1,32 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="OneViewer.App"
+			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:sty="using:FluentAvalonia.Styling" >
+	
+	<Application.Resources>
+		<ResourceDictionary>
+			<Color x:Key="SystemAccentColor">#0078D4</Color>
+
+			<Color x:Key="SystemAccentColorLight1">#7F69FF</Color>
+			<Color x:Key="SystemAccentColorLight2">#9B8AFF</Color>
+			<Color x:Key="SystemAccentColorLight3">#B9ADFF</Color>
+
+			<Color x:Key="SystemAccentColorDark1">#43339C</Color>
+			<Color x:Key="SystemAccentColorDark2">#33238C</Color>
+			<Color x:Key="SystemAccentColorDark3">#1D115C</Color>
+
+			<SolidColorBrush x:Key="SystemAccentColorBrush" Color="{StaticResource SystemAccentColor}" />
+
+			<Color x:Key="NavbarForgroundColor">#FFFFFF</Color>
+			<SolidColorBrush x:Key="NavbarForgroundColorBrush" Color="{StaticResource NavbarForgroundColor}"/>
+			
+		</ResourceDictionary>
+	</Application.Resources>
+	
+    <Application.Styles>
+        <!--<FluentTheme Mode="Light"/>-->
+		<sty:FluentAvaloniaTheme />
+		<StyleInclude Source="/Themes/Generic.axaml" />
+    </Application.Styles>
+</Application>
