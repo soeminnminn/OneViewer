@@ -166,6 +166,8 @@ UpgradeLog*.htm
 App_Data/*.mdf
 App_Data/*.ldf
 
+*.Generated.cs
+
 #############
 ## Windows detritus
 #############
