@@ -1,0 +1,53 @@
+﻿<Application x:Class="OneViewer.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:OneViewer"
+             StartupUri="Views\MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            
+            <Color x:Key="SystemAccentColor">#0078D4</Color>
+            <SolidColorBrush x:Key="SystemAccentColorBrush" Color="{StaticResource SystemAccentColor}" />
+            <SolidColorBrush x:Key="SystemForegroundColorBrush" Color="{StaticResource {x:Static SystemColors.ControlTextColorKey}}" />
+            <SolidColorBrush x:Key="SystemBackgroundColorBrush" Color="{StaticResource {x:Static SystemColors.WindowColorKey}}" />
+
+            <Color x:Key="NavbarForgroundColor">#FFFFFF</Color>
+            <SolidColorBrush x:Key="NavbarForgroundColorBrush" Color="{StaticResource NavbarForgroundColor}"/>
+
+            <Color x:Key="BorderColor">#242424</Color>
+            <SolidColorBrush x:Key="BorderBrush" Opacity="0.5" Color="{StaticResource BorderColor}"/>
+
+            <Color x:Key="PaneBackgroundColor">#FAFAFA</Color>
+            <SolidColorBrush x:Key="PaneBackgroundBrush" Color="{StaticResource PaneBackgroundColor}" />
+
+            <Color x:Key="HeadbarBackgroundColor">#FAFAFA</Color>
+            <SolidColorBrush x:Key="HeadbarBackgroundColorBrush" Color="{StaticResource HeadbarBackgroundColor}" />
+
+            <Color x:Key="PrimaryColor">#326cf3</Color>
+            <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource PrimaryColor}"/>
+
+            <Color x:Key="BackgroundColor">#66ffffff</Color>
+            <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource BackgroundColor}"/>
+
+            <Color x:Key="EffectShadowColor">#88000000</Color>
+            <DropShadowEffect x:Key="EffectShadow1" BlurRadius="5" ShadowDepth="1" Direction="270" Color="{StaticResource EffectShadowColor}" Opacity=".2" RenderingBias="Performance" />
+            <DropShadowEffect x:Key="EffectShadow2" BlurRadius="8" ShadowDepth="1.5" Direction="270" Color="{StaticResource EffectShadowColor}" Opacity=".2" RenderingBias="Performance" />
+            <DropShadowEffect x:Key="EffectShadow3" BlurRadius="14" ShadowDepth="4.5" Direction="270" Color="{StaticResource EffectShadowColor}" Opacity=".2" RenderingBias="Performance" />
+            <DropShadowEffect x:Key="EffectShadow4" BlurRadius="25" ShadowDepth="8" Direction="270" Color="{StaticResource EffectShadowColor}" Opacity=".2" RenderingBias="Performance" />
+            <DropShadowEffect x:Key="EffectShadow5" BlurRadius="35" ShadowDepth="13" Direction="270" Color="{StaticResource EffectShadowColor}" Opacity=".2" RenderingBias="Performance" />
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/OneViewer;component/Themes/PathIcons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/OneViewer;component/Themes/Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/OneViewer;component/Themes/FsIcons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/OneViewer;component/Themes/PathIcon.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/OneViewer;component/Themes/IconedContentControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/OneViewer;component/Themes/Breadcrumb.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/OneViewer;component/Themes/DropdownButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/OneViewer;component/Themes/MultiModeListView.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/OneViewer;component/Themes/EmptyFolderImage.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/OneViewer;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

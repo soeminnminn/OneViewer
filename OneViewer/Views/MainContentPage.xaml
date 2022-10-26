@@ -1,0 +1,357 @@
+﻿<Page x:Class="OneViewer.Views.MainContentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OneViewer.Views"
+      xmlns:common="clr-namespace:OneViewer.Common"
+      xmlns:models="clr-namespace:OneViewer.Models"
+      xmlns:ts="clr-namespace:OneViewer.TemplateSelectors"
+      xmlns:ctrls="clr-namespace:OneViewer.Controls"
+      xmlns:converters="clr-namespace:OneViewer.Converters"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Main Content">
+
+    <Page.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Copy" CanExecute="Copy_CanExecute" Executed="Copy_Executed" />
+        <CommandBinding Command="ApplicationCommands.Cut" CanExecute="Cut_CanExecute" Executed="Cut_Executed" />
+        <CommandBinding Command="ApplicationCommands.Paste" CanExecute="Paste_CanExecute" Executed="Paste_Executed" />
+        <CommandBinding Command="common:RoutedCommands.Rename" CanExecute="Rename_CanExecute" Executed="Rename_Executed" />
+        <CommandBinding Command="common:RoutedCommands.SelectAll" CanExecute="SelectAll_CanExecute" Executed="SelectAll_Executed" />
+    </Page.CommandBindings>
+
+    <Page.Resources>
+
+        <DataTemplate x:Key="TilesDirectoryTemplate" DataType="{x:Type models:DirectoryModel}">
+            <ctrls:IconedContentControl Spacing="4" Orientation="Vertical" 
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center" >
+                <ctrls:IconedContentControl.Icon>
+                    <Grid Width="112" Height="86">
+                        <Image Source="{StaticResource IconFolderLargeBG}" />
+                        <Image Source="{StaticResource IconFolderLargeFG}" />
+                    </Grid>
+                </ctrls:IconedContentControl.Icon>
+                <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="110" Margin="0,0,0,8" />
+            </ctrls:IconedContentControl>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TilesFileTemplate" DataType="{x:Type models:FileModel}">
+            <ctrls:IconedContentControl Spacing="4" Orientation="Vertical" 
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center" >
+                <ctrls:IconedContentControl.Icon>
+                    <Grid Width="112" Height="86">
+                        <Image Source="{StaticResource genericFileIcon}" />
+                    </Grid>
+                </ctrls:IconedContentControl.Icon>
+                <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="110" Margin="0,0,0,8" />
+            </ctrls:IconedContentControl>
+        </DataTemplate>
+
+        <DataTemplate x:Key="CompactDirectoryTemplate" DataType="{x:Type models:DirectoryModel}">
+            <Grid Width="300">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                
+                <Image Source="{StaticResource folderIcon}" Grid.RowSpan="3" HorizontalAlignment="Center" Width="48" Height="48" />
+                
+                <TextBlock Grid.Column="1" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding DateModified}" Foreground="{StaticResource GrayTextBrush}" />
+                <TextBlock Grid.Column="1" Grid.Row="2" Text="  " IsEnabled="False" />
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="CompactFileTemplate" DataType="{x:Type models:FileModel}">
+            <Grid Width="300">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Image Source="{StaticResource genericFileIcon}" Grid.RowSpan="3" HorizontalAlignment="Center" Width="48" Height="48" />
+
+                <TextBlock Grid.Column="1" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding DateModified}" Foreground="{StaticResource GrayTextBrush}" />
+                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SizeString}" Foreground="{StaticResource GrayTextBrush}" />
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ListDirectoryNameTemplate" DataType="{x:Type models:DirectoryModel}">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="{StaticResource IconYellowFolder}" Width="18" Margin="0,0,4,0" />
+                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ListFileNameTemplate" DataType="{x:Type models:FileModel}">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="{StaticResource genericFileIcon}" Width="18" Margin="0,0,4,0" />
+                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+
+        <converters:BooleanObjectConverter x:Key="BooleanObjectConverter" />
+        <converters:BooleanObjectConverter x:Key="InvertBooleanObjectConverter" IsInvert="True" />
+        
+        <converters:ViewModeConverter x:Key="ViewModeConverter" />
+
+        <ts:FileListItemTemplateSelector x:Key="TilesTemplateSelector" 
+                DirectoryTemplate="{StaticResource TilesDirectoryTemplate}"
+                FileTemplate="{StaticResource TilesFileTemplate}" />
+
+        <ts:FileListItemTemplateSelector x:Key="CompactTemplateSelector" 
+                DirectoryTemplate="{StaticResource CompactDirectoryTemplate}"
+                FileTemplate="{StaticResource CompactFileTemplate}"/>
+
+        <ts:FileListItemTemplateSelector x:Key="ListTemplateSelector" 
+                DirectoryTemplate="{StaticResource ListDirectoryNameTemplate}"
+                FileTemplate="{StaticResource ListFileNameTemplate}"/>
+
+    </Page.Resources>
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" BorderThickness="0,0,0,0.5" BorderBrush="{StaticResource BorderBrush}" Height="48">
+            <Grid x:Name="TopBar" Background="{DynamicResource HeadbarBackgroundColorBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Menu Background="Transparent">
+                    <MenuItem Margin="8,8" Height="32">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <ctrls:PathIcon Kind="PathIconEdit" Margin="4,0,8,0" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                                <TextBlock Text="Edit" VerticalAlignment="Center"/>
+                                <ctrls:PathIcon Kind="PathIconDropArrow" Width="10" Height="10" Margin="12,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </StackPanel>
+                        </MenuItem.Header>
+                        <MenuItem Command="ApplicationCommands.Cut">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconCut" Width="14" Height="14" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="ApplicationCommands.Copy">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconCopy" Width="14" Height="14" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="ApplicationCommands.Paste">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconPaste" Width="14" Height="14" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Rename" Command="common:RoutedCommands.Rename">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconRename" Width="14" Height="14" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Select all" Command="common:RoutedCommands.SelectAll">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconSelectAll" Width="14" Height="14" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+                <Menu Grid.Column="1" Background="Transparent" HorizontalAlignment="Right" Margin="0,0,12,0">
+                    <MenuItem Margin="8,8" Height="32">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <ctrls:PathIcon Kind="PathIconSort" Margin="4,0,8,0" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                                <TextBlock Text="Sort" VerticalAlignment="Center"/>
+                                <ctrls:PathIcon Kind="PathIconDropArrow" Width="10" Height="10" Margin="12,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </StackPanel>
+                        </MenuItem.Header>
+                        <MenuItem Header="Name" Click="SortMode_Click" CommandParameter="Name">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconCheckMark" 
+                                        Visibility="{Binding SortMode, Converter={StaticResource BooleanObjectConverter}, ConverterParameter=Name}"
+                                        Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Modified" Click="SortMode_Click" CommandParameter="Modified">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconCheckMark" 
+                                        Visibility="{Binding SortMode, Converter={StaticResource BooleanObjectConverter}, ConverterParameter=Modified}"
+                                        Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Date taken" Click="SortMode_Click" CommandParameter="DateTaken">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconCheckMark" 
+                                        Visibility="{Binding SortMode, Converter={StaticResource BooleanObjectConverter}, ConverterParameter=DateTaken}"
+                                        Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="File size" Click="SortMode_Click" CommandParameter="FileSize">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconCheckMark" 
+                                        Visibility="{Binding SortMode, Converter={StaticResource BooleanObjectConverter}, ConverterParameter=FileSize}"
+                                        Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="Ascending" Click="AscDesc_Click" CommandParameter="Asc">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconCheckMark" 
+                                        Visibility="{Binding SortAscending, Converter={StaticResource BooleanObjectConverter}}"
+                                        Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Descending" Click="AscDesc_Click" CommandParameter="Desc">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconCheckMark" 
+                                        Visibility="{Binding SortAscending, Converter={StaticResource InvertBooleanObjectConverter}}"
+                                        Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+
+                    <MenuItem Margin="8,8" Height="32">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <ctrls:PathIcon Kind="PathIconViewTiles" Margin="4,0,8,0" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                                <ctrls:PathIcon Kind="PathIconDropArrow" Width="10" Height="10" Margin="4,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </StackPanel>
+                        </MenuItem.Header>
+                        <MenuItem Header="List" Click="ViewMode_Click" CommandParameter="List">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconViewList" Width="14" Height="14" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Compact List" Click="ViewMode_Click" CommandParameter="CompactList">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconViewList" Width="14" Height="14" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Tiles" Click="ViewMode_Click" CommandParameter="Tiles">
+                            <MenuItem.Icon>
+                                <ctrls:PathIcon Kind="PathIconViewTiles" Width="14" Height="14" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+
+                    <MenuItem Margin="8,8" Height="32">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <ctrls:PathIcon Kind="PathIconInfoPane" Margin="8,0,0,0" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                                <TextBlock Text="Info" VerticalAlignment="Center" Margin="8,0,8,0"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
+                </Menu>
+            </Grid>
+        </Border>
+
+        <Border DockPanel.Dock="Right" 
+                    x:Name="DetailsPane" 
+                    BorderThickness="0.5,0,0,0" 
+                    BorderBrush="{StaticResource BorderBrush}" 
+                    Width="320"
+                    Visibility="{Binding IsShowInfo, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="48" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Border x:Name="DetailsPaneHeader" BorderThickness="0,0,0,0.5" BorderBrush="{StaticResource BorderBrush}" Background="{DynamicResource HeadbarBackgroundColorBrush}" Height="48">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="48"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="44"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="{StaticResource IconYellowFolder}" Width="24" Margin="8" />
+                        <TextBlock Grid.Column="1" Text="My Files" FontWeight="Medium" VerticalAlignment="Center" FontSize="14"/>
+                        <Button x:Name="btnInfoClose" Grid.Column="2" Style="{StaticResource BorderlessButton}" HorizontalAlignment="Left">
+                            <ctrls:PathIcon Kind="PathIconClose" Width="12" Height="12" Margin="8" Foreground="{StaticResource SystemForegroundColorBrush}" />
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <ScrollViewer Grid.Row="1">
+                    <Grid x:Name="DetailsPaneContent">
+
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <ctrls:Breadcrumb ItemsSource="{Binding BreadcrumbItems}" Margin="8,4,8,4" SelectedItem="{Binding BreadcrumbSelectedItem, Mode=OneWayToSource}">
+                <ctrls:Breadcrumb.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ShortName}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="120" />
+                    </DataTemplate>
+                </ctrls:Breadcrumb.ItemTemplate>
+            </ctrls:Breadcrumb>
+
+            <ctrls:MultiModeListView
+                x:Name="fileListView"
+                Grid.Row="1" BorderThickness="0,1,0,0"
+                BorderBrush="{StaticResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                ScrollViewer.CanContentScroll="False"
+                MouseDoubleClick="listBox_MouseDoubleClick"
+                ItemsSource="{Binding ListItems}" 
+                SelectedItem="{Binding ListSelectedItem, Mode=OneWayToSource}"
+                ViewMode="{Binding ViewMode, Converter={StaticResource ViewModeConverter}}"
+                LargeIconTemplateSelector="{StaticResource TilesTemplateSelector}"
+                TilesTemplateSelector="{StaticResource CompactTemplateSelector}">
+
+                <ctrls:MultiModeListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <GridViewColumn Header="Name" Width="200" CellTemplateSelector="{StaticResource ListTemplateSelector}" />
+                            <GridViewColumn Header="Date modified" Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Grid.Column="1" Text="{Binding DateModified}" Foreground="{StaticResource GrayTextBrush}" VerticalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Type" Width="120" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Grid.Column="1" Text="{Binding TypeName}" Foreground="{StaticResource GrayTextBrush}" VerticalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Size" Width="120" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Grid.Column="1" Text="{Binding SizeString}" Foreground="{StaticResource GrayTextBrush}" VerticalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ctrls:MultiModeListView.View>
+
+                <ctrls:MultiModeListView.EmptyContent>
+                    <Image Source="{StaticResource emptyFolderImage}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="210" Height="210"/>
+                </ctrls:MultiModeListView.EmptyContent>
+                
+            </ctrls:MultiModeListView>
+        </Grid>
+    </DockPanel>
+</Page>
